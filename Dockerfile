@@ -9,6 +9,6 @@ COPY package*.json ./
 
 RUN npm install --only=production
 
-COPY ./dist ./dist
+COPY ./dist .
 
 CMD npm run start:prod
