@@ -2,6 +2,10 @@ name: Test, Build and Deploy Production
 on:
   release:
     types: [released]
+env:
+  PROJECT_ID: ${{ secrets.RUN_PROJECT_PRODUCTION }}
+  RUN_REGION: europe-west2
+  SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
 jobs:
   test:
     name: Test

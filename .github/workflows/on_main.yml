@@ -4,7 +4,7 @@ on:
     branches:
       - 'main'
 env:
-  PROJECT_ID: ${{ secrets.RUN_PROJECT }}
+  PROJECT_ID: ${{ secrets.RUN_PROJECT_STAGING }}
   RUN_REGION: europe-west2
   SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
 jobs:
