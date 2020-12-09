@@ -53,3 +53,31 @@ jobs:
         run: npm run build
       - name: Minify Application
         run: npm run minify
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Latest Version
+        uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '15.x'
+      - name: Cache Node Modules
+        id: test-npm-prod
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-v15-${{ hashFiles('package-lock.json') }}-production
+      - name: Install All Dependencies
+        if: steps.test-npm-prod.outputs.cache-hit != 'true'
+        run: npm install --production
+      - name: Load Cached Build
+        id: build-dist
+        uses: actions/cache@v2
+        with:
+          path: dist
+          key: ${{ runner.os }}-v15-${{ hashFiles('dist/**/*') }}
+      - name: Build Docker Image
+        run: docker build .
