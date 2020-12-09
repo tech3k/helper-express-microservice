@@ -83,4 +83,4 @@ jobs:
       - name: Link Docker to GCloud
         run: gcloud auth configure-docker
       - name: Deploy
-        run: gcloud run deploy --quiet --region "$RUN_REGION" --image "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" --platform managed --allow-unauthenticated
+        run: gcloud run deploy "$SERVICE_NAME" -quiet --region "$RUN_REGION" --image "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" --platform managed --allow-unauthenticated
