@@ -84,9 +84,4 @@ jobs:
         run: gcloud auth configure-docker
       - name: Deploy
         run: |-
-          gcloud run deploy "$SERVICE_NAME" \
-            --quiet \
-            --region "$RUN_REGION" \
-            --image "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
-            --platform "managed" \
-            --allow-unauthenticated
+          docker push "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA"
