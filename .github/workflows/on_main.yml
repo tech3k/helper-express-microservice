@@ -80,6 +80,8 @@ jobs:
           project_id: ${{ secrets.RUN_PROJECT }}
       - name: Build
         run: docker build . --tag "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA"
+      - name: Link Docker to GCloud
+        run: gcloud auth configure-docker
       - name: Deploy
         run: |-
           gcloud run deploy "$SERVICE_NAME" \
