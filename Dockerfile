@@ -7,8 +7,10 @@ ENV HOST 0.0.0.0
 
 COPY package*.json ./
 
-RUN npm install --only=production
+RUN npm install
 
-COPY ./dist ./dist
+RUN npm run build
+
+RUN npm run minify
 
 CMD npm run start:prod
