@@ -68,25 +68,25 @@ jobs:
       - name: Checkout Latest Version
         uses: actions/checkout@v2
       - name: Load Cached Build
-        id: build-dist
+        id: build-dist-cache
         uses: actions/cache@v2
         with:
           path: dist
           key: ${{ runner.os }}-v15-${{ hashFiles('dist/**/*') }}
 
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-        if: steps.build-dist.outputs.cache-hit == 'true'
+        if: steps.build-dist-cache.outputs.cache-hit == 'true'
         with:
           service_account_key: ${{ secrets.RUN_SA_KEY }}
           project_id: ${{ secrets.RUN_PROJECT }}
       - name: Build
-        if: steps.build-dist.outputs.cache-hit == 'true'
+        if: steps.build-dist-cache.outputs.cache-hit == 'true'
         run: |-
           gcloud builds submit \
             --quiet \
             --tag "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA"
       - name: Deploy
-        if: steps.build-dist.outputs.cache-hit == 'true'
+        if: steps.build-dist-cache.outputs.cache-hit == 'true'
         run: |-
           gcloud run deploy "$SERVICE_NAME" \
             --quiet \
