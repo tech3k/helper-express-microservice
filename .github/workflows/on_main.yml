@@ -3,12 +3,10 @@ on:
   push:
     branches:
       - 'main'
-
 env:
   PROJECT_ID: ${{ secrets.RUN_PROJECT }}
   RUN_REGION: europe-west2
-  SERVICE_NAME: helper-express-microservice
-
+  SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
 jobs:
   test:
     name: Test
@@ -33,36 +31,9 @@ jobs:
         run: npm test
       - name: Run Linter
         run: npm run lint
-  build:
-    name: Build
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Latest Version
-        uses: actions/checkout@v2
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
-      - name: Load Cached Node Modules
-        id: test-npm
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-v12-${{ hashFiles('package-lock.json') }}
-      - name: Cache Build
-        id: build-dist
-        uses: actions/cache@v2
-        with:
-          path: dist
-          key: ${{ runner.os }}-v12-${{ hashFiles('dist/**/*') }}
-      - name: Build Application
-        run: npm run build
-      - name: Minify Application
-        run: npm run minify
   deploy:
     name: Deploy
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Latest Version
